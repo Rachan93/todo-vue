@@ -40,13 +40,11 @@ Route::middleware([
 
 
 Route::middleware('auth')->group(function () {
-
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
-    Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
     Route::patch('/tasks/{task}', [TaskController::class, 'status'])->name('tasks.status');
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::delete('/tasks/{task}', [TaskController::class, 'delete'])->name('tasks.delete');
-    
- });
 
+
+});
 

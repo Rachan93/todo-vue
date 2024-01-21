@@ -36,7 +36,7 @@ class TaskController extends Controller
 
 
         $task->save();
-
+        
         return Inertia::render('Tasks/Index');
     }
 
