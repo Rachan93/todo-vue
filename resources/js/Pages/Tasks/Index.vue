@@ -1,33 +1,32 @@
 <template>
     <div>
-      <h1>Tasks Index Page</h1>
-  
-      <!-- Include TaskForm component to create tasks -->
-      <TaskForm @taskCreated="updateTasks" />
-  
-      <!-- Include TaskList component to display tasks -->
-      <TaskList :tasks="tasks" />
+        <h1>Tasks Index Page</h1>
+
+        <!-- Include TaskForm component to create tasks -->
+        <TaskForm @taskCreated="updateTasks" />
+
+        <!-- Include TaskList component to display tasks -->
+        <TaskList :tasks="tasks" />
     </div>
-  </template>
-  
-  <script>
-  import TaskList from './TaskList.vue';
-  import TaskForm from './TaskForm.vue';  // Import the TaskForm component
-  
-  export default {
+</template>
+
+<script>
+import TaskList from "./TaskList.vue";
+import TaskForm from "./TaskForm.vue"; // Import the TaskForm component
+
+export default {
     components: {
-      TaskList,
-      TaskForm,
+        TaskList,
+        TaskForm,
     },
     props: {
-      tasks: Array,
+        tasks: Array,
     },
     methods: {
-      // Method to update tasks after creation
-      updateTasks(task) {
-        this.tasks.push(task);
-      },
+        // Method to update tasks after creation
+        updateTasks(task) {
+            this.tasks.push(task);
+        },
     },
-  };
-  </script>
-  
+};
+</script>

@@ -1,81 +1,69 @@
-<!-- resources/js/Pages/Tasks/TaskForm.vue -->
+<script setup>
+import { Head, Link, useForm } from "@inertiajs/vue3";
+import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import AuthenticationCardLogo from "@/Components/AuthenticationCardLogo.vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import InputError from "@/Components/InputError.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+
+const form = useForm({
+    name: "",
+    description: "", // Added description field
+});
+
+const submit = () => {
+    form.post(route("tasks.store"), {
+        onFinish: () => {
+            form.reset("name", "description"); // Reset fields after successful submission
+        },
+    });
+};
+</script>
 
 <template>
-    <div>
-      <!-- Task creation form -->
-      <form @submit.prevent="createTask">
-        <label for="name">Task Name:</label>
-        <input type="text" v-model="taskName" id="name" required>
-        <button type="submit">Create Task</button>
-      </form>
-  
-      <!-- Task list -->
-      <TaskList :tasks="tasks" @setStatus="setStatus" @deleteTask="deleteTask" />
-  
-      <!-- Delete confirmation modal -->
-      <Modal :show="confirmDeleteModal" @close="closeDeleteModal" maxWidth="sm">
-        <p>Are you sure you want to delete this task?</p>
-        <button @click="deleteConfirmed">Delete</button>
-        <button @click="closeDeleteModal">Cancel</button>
-      </Modal>
-    </div>
-  </template>
-  
-  <script>
-  import TaskList from './TaskList.vue';
-  import Modal from '../../Components/Modal.vue';
-  
-  export default {
-    components: {
-      TaskList,
-      Modal,
-    },
-    data() {
-      return {
-        taskName: '',
-        tasks: [], // Populate tasks data as needed
-        confirmDeleteModal: false,
-        taskToDelete: null,
-      };
-    },
-    methods: {
-      createTask() {
-        // Implement your task creation logic
-        const newTask = {
-          id: Date.now(), // You should generate a unique ID
-          name: this.taskName,
-          description: '', // Add description as needed
-          is_done: false, // Set the initial status
-        };
-  
-        // Emit an event to notify the parent component (index.vue) about the new task
-        this.$emit('taskCreated', newTask);
-  
-        // Clear the form after creation
-        this.taskName = '';
-      },
-      setStatus(task) {
-        // Implement your task status update logic
-        console.log('Set status for task:', task);
-      },
-      deleteTask(task) {
-        // Show delete confirmation modal
-        this.taskToDelete = task;
-        this.confirmDeleteModal = true;
-      },
-      deleteConfirmed() {
-        // Implement your task deletion logic
-        console.log('Task deleted:', this.taskToDelete);
-        // Close the delete confirmation modal
-        this.confirmDeleteModal = false;
-        this.taskToDelete = null;
-      },
-      closeDeleteModal() {
-        // Close the delete confirmation modal without deleting
-        this.confirmDeleteModal = false;
-        this.taskToDelete = null;
-      },
-    },
-  };
-  </script>
-  
+    <Head title="Task Form" />
+
+    <AuthenticationCard>
+        <!-- Your form structure -->
+        <form @submit.prevent="submit">
+            <div>
+                <InputLabel for="name" value="Name" />
+                <TextInput
+                    id="name"
+                    v-model="form.name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+                    autocomplete="name"
+                />
+                <InputError class="mt-2" :message="form.errors.name" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="description" value="Description" />
+                <TextInput
+                    id="description"
+                    v-model="form.description"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+                    autocomplete="description"
+                />
+                <InputError class="mt-2" :message="form.errors.description" />
+            </div>
+
+            <div class="flex items-center justify-end mt-4">
+                <!-- Your submit button and other UI elements -->
+                <PrimaryButton
+                    class="ms-4"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
+                >
+                    Submit Task
+                </PrimaryButton>
+            </div>
+        </form>
+    </AuthenticationCard>
+</template>
