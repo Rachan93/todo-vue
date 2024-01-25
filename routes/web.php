@@ -41,8 +41,8 @@ Route::middleware([
 
 Route::middleware('auth')->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
-    Route::patch('/tasks/{task}', [TaskController::class, 'status'])->name('tasks.status');
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::put('/tasks/{task}', [TaskController::class, 'status'])->name('tasks.status');
     Route::delete('/tasks/{task}', [TaskController::class, 'delete'])->name('tasks.delete');
 
 
