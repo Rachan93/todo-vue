@@ -4,19 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskStoreRequest;
 use App\Models\Task;
+use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        // On applique le middleware HandlePrecognitiveRequests à la méthode store() uniquement.
+        // Il permet de valider le formulaire de création de tâche en direct.
+        $this->middleware(HandlePrecognitiveRequests::class)->only('store');
+    }
+
+   
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
 
-        $tasks = Auth::user()->tasks;
+        $tasks = Auth::user()->tasks()->latest()->get();
 
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks,
